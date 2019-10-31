@@ -1,0 +1,36 @@
+<html>
+    <canvas id="canvas" width="800" height="400" style="border: 1px solid #000000;"></canvas>
+</html>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io("http://localhost:3000");
+
+    socket.emit("setPlayer", {n: 2});
+
+    socket.on('draw', (game) => {
+        console.log(game);
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext("2d");
+        ctx.beginPath();
+        ctx.clearRect(0, 0, 800, 400);
+        drawPlayers(game, ctx);
+    })
+    document.onkeydown = handleKeyDown;
+    function handleKeyDown(a){
+        socket.emit(a.key, 2);
+    }
+</script>
+
+
+<script>
+        function drawPlayers(game, ctx){
+            ctx.moveTo(100,game.player1.y);
+        ctx.lineTo(100,game.player1.y + 50)
+        ctx.stroke();
+        ctx.moveTo(500,game.player2.y);
+        ctx.lineTo(500,game.player2.y + 50)
+        ctx.stroke();
+        }
+    </script>
